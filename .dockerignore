@@ -1,0 +1,16 @@
+# Non-essential files for the container
+.git
+.gitignore
+creditcard.csv
+train_model.py
+task.md
+implementation_plan.md
+walkthrough.md
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+.ipynb_checkpoints
+venv
+.dockerignore

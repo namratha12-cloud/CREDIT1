@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentryAi | Credit Fraud Protection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SentryAi</h1>
+            <p class="subtitle">Nexus-Class Transaction Surveillance & Fraud Detection</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card input-section">
+                <h2>Transaction Parameters</h2>
+                <div class="feature-grid" id="featureInputs">
+                    <!-- Feature inputs will be generated here -->
+                </div>
+                <button class="btn-predict" onclick="predictFraud()">Analyze Transaction</button>
+            </div>
+
+            <div class="card result-section">
+                <h2>Detection Engine</h2>
+                <div id="loaderContainer" class="result-placeholder" style="display: none;">
+                    <div class="loader"></div>
+                    <p style="margin-top: 1rem;">Analyzing vector space data...</p>
+                </div>
+
+                <div id="placeholder" class="result-placeholder">
+                    <div class="result-icon">🛡️</div>
+                    <p>Enter transaction data to begin surveillance</p>
+                    <button style="margin-top: 1rem; background: transparent; border: 1px solid var(--glass-border); color: var(--text-dim); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;" onclick="fillSampleData()">Load Sample Data</button>
+                </div>
+
+                <div id="predictionResult" class="prediction-result">
+                    <div id="statusBadge" class="status-badge">LEGITIMATE</div>
+                    
+                    <div class="gauge-container">
+                        <div id="probValue" class="probability-txt">0.12%</div>
+                        <div class="probability-label">Fraud Probability Index</div>
+                    </div>
+
+                    <p id="riskAnalysis" style="color: var(--text-dim); max-width: 300px; margin: 0 auto; line-height: 1.6;">
+                        Transaction matches standard patterns. Low risk level detected.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const features = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount'];
+        
+        function initInputs() {
+            const container = document.getElementById('featureInputs');
+            features.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `
+                    <label>${f}</label>
+                    <input type="number" id="f_${f}" placeholder="0.00" value="0.0">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        async function predictFraud() {
+            const inputData = features.map(f => parseFloat(document.getElementById(`f_${f}`).value || 0));
+
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('predictionResult').style.display = 'none';
+            document.getElementById('loaderContainer').style.display = 'flex';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features: inputData })
+                });
+                const result = await response.json();
+
+                document.getElementById('loaderContainer').style.display = 'none';
+                document.getElementById('predictionResult').style.display = 'block';
+
+                const badge = document.getElementById('statusBadge');
+                const riskTxt = document.getElementById('riskAnalysis');
+                const prob = (result.probability * 100).toFixed(2);
+
+                document.getElementById('probValue').innerText = prob + '%';
+
+                if (result.prediction === 1) {
+                    badge.innerText = 'FRAUD DETECTED';
+                    badge.className = 'status-badge status-fraud';
+                    riskTxt.innerText = 'CRITICAL: High risk anomaly detected. Transaction suggests fraudulent patterns.';
+                    riskTxt.style.color = 'var(--fraud-red)';
+                } else {
+                    badge.innerText = 'CLEARED';
+                    badge.className = 'status-badge status-safe';
+                    riskTxt.innerText = 'Transaction matches standard behavioral patterns. Nominal risk level.';
+                    riskTxt.style.color = 'var(--text-dim)';
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Engine Error: Surveillance failed.");
+            }
+        }
+
+        function fillSampleData() {
+            // Sample data from a real fraud case (simplified)
+            const sample = [1234.0, -2.31, 1.65, -1.17, 3.99, -0.12, -0.61, -1.57, 1.24, -2.48, -3.23, 2.8, -4.95, -0.59, -5.21, 0.43, -3.07, -4.72, -1.24, 0.54, 0.12, 0.51, 0.17, -0.56, -0.16, 0.23, 0.54, 0.17, 0.08, 149.62];
+            features.forEach((f, i) => {
+                document.getElementById(`f_${f}`).value = sample[i];
+            });
+        }
+
+        initInputs();
+    </script>
+</body>
+</html>

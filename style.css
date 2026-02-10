@@ -1,0 +1,253 @@
+:root {
+    --primary-color: #00f2fe;
+    --secondary-color: #4facfe;
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-white: #f8fafc;
+    --text-dim: #94a3b8;
+    --fraud-red: #ff4d4d;
+    --safe-green: #00e676;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    color: var(--text-white);
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+h1 {
+    font-size: 3rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+}
+
+p.subtitle {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.input-section h2,
+.result-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.feature-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.feature-grid::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+input {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.6rem;
+    color: var(--text-white);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-predict {
+    width: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+}
+
+.btn-predict:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+}
+
+.result-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-dim);
+}
+
+.result-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.prediction-result {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.status-safe {
+    background: rgba(0, 230, 118, 0.1);
+    color: var(--safe-green);
+    border: 1px solid var(--safe-green);
+}
+
+.status-fraud {
+    background: rgba(255, 77, 77, 0.1);
+    color: var(--fraud-red);
+    border: 1px solid var(--fraud-red);
+}
+
+.gauge-container {
+    margin: 2rem 0;
+    position: relative;
+}
+
+.probability-txt {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.probability-label {
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.loader {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: var(--primary-color);
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
